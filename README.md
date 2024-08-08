@@ -51,7 +51,7 @@ A simple Java Swing application for tracking and calculating grades. This applic
 - Enter grades such as `85`, `92`, and `78`.
 - Click "Calculate" to see the results.
 
-## Contributing
+# Contributing
 
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
