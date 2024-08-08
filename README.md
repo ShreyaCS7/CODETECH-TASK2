@@ -55,14 +55,6 @@ A simple Java Swing application for tracking and calculating grades. This applic
 
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
-### Reporting Issues
-
-If you encounter any issues with the application, please report them [here](https://github.com/yourusername/grade-tracker-ui/issues).
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 - Inspired by simple grade tracking and GPA calculation needs.
