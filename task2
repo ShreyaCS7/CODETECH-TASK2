@@ -1,0 +1,184 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
+public class GradeTrackerUI extends JFrame {
+
+    private JTextField numberOfGradesField;
+    private JTextField[] gradeFields;
+    private JLabel averageLabel;
+    private JLabel letterGradeLabel;
+    private JLabel gpaLabel;
+    private JButton generateFieldsButton;
+    private JButton calculateButton;
+    private JPanel gradePanel;
+
+    public GradeTrackerUI() {
+        setTitle("Grade Tracker");
+        setSize(600, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
+
+        
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        inputPanel.setBackground(new Color(60, 63, 65)); // Dark background
+        JLabel numberOfGradesLabel = new JLabel("Number of Subjects/Assignments:");
+        numberOfGradesLabel.setForeground(Color.WHITE);
+        numberOfGradesField = new JTextField(10);
+        numberOfGradesField.setToolTipText("Enter the number of subjects or assignments");
+
+        generateFieldsButton = new JButton("Generate Fields");
+        generateFieldsButton.setBackground(new Color(75, 110, 175));
+        generateFieldsButton.setForeground(Color.WHITE);
+        generateFieldsButton.addActionListener(new GenerateFieldsButtonListener());
+
+        inputPanel.add(numberOfGradesLabel);
+        inputPanel.add(numberOfGradesField);
+        inputPanel.add(generateFieldsButton);
+
+        add(inputPanel, BorderLayout.NORTH);
+
+    
+        gradePanel = new JPanel();
+        gradePanel.setLayout(new GridLayout(0, 2, 10, 10));
+        gradePanel.setBackground(new Color(43, 43, 43));
+        JScrollPane scrollPane = new JScrollPane(gradePanel);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JPanel resultPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        resultPanel.setBackground(new Color(43, 43, 43));
+        averageLabel = new JLabel("Average Grade: ");
+        letterGradeLabel = new JLabel("Letter Grade: ");
+        gpaLabel = new JLabel("GPA: ");
+
+        averageLabel.setForeground(Color.WHITE);
+        letterGradeLabel.setForeground(Color.WHITE);
+        gpaLabel.setForeground(Color.WHITE);
+
+        resultPanel.add(averageLabel);
+        resultPanel.add(new JLabel()); 
+        resultPanel.add(letterGradeLabel);
+        resultPanel.add(new JLabel()); 
+        resultPanel.add(gpaLabel);
+        resultPanel.add(new JLabel()); 
+
+        add(resultPanel, BorderLayout.SOUTH);
+
+        // Panel for calculate button
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        buttonPanel.setBackground(new Color(60, 63, 65));
+        calculateButton = new JButton("Calculate");
+        calculateButton.setBackground(new Color(75, 110, 175));
+        calculateButton.setForeground(Color.WHITE);
+        calculateButton.addActionListener(new CalculateButtonListener());
+        calculateButton.setEnabled(false); 
+        buttonPanel.add(calculateButton);
+
+        add(buttonPanel, BorderLayout.EAST);
+    }
+
+    private class GenerateFieldsButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            removePreviousGradeFields();
+
+            try {
+                int numberOfGrades = Integer.parseInt(numberOfGradesField.getText());
+                gradeFields = new JTextField[numberOfGrades];
+
+                for (int i = 0; i < numberOfGrades; i++) {
+                    JLabel label = new JLabel("Grade for Subject/Assignment " + (i + 1) + ":");
+                    label.setForeground(Color.WHITE);
+                    JTextField gradeField = new JTextField(10);
+                    gradeField.setToolTipText("Enter a grade between 0 and 100");
+                    gradeFields[i] = gradeField;
+                    gradePanel.add(label);
+                    gradePanel.add(gradeField);
+                }
+
+                calculateButton.setEnabled(true); 
+                validate();
+                repaint();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(GradeTrackerUI.this, "Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private class CalculateButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                int numberOfGrades = gradeFields.length;
+                double total = 0;
+
+                for (JTextField gradeField : gradeFields) {
+                    double grade = Double.parseDouble(gradeField.getText());
+
+                    if (grade < 0 || grade > 100) {
+                        throw new NumberFormatException();
+                    }
+
+                    total += grade;
+                }
+
+                double average = total / numberOfGrades;
+                String letterGrade = getLetterGrade(average);
+                double gpa = calculateGPA(letterGrade);
+
+                averageLabel.setText(String.format("Average Grade: %.2f", average));
+                letterGradeLabel.setText("Letter Grade: " + letterGrade);
+                gpaLabel.setText("GPA: " + gpa);
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(GradeTrackerUI.this, "Please enter valid grades between 0 and 100.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void removePreviousGradeFields() {
+        if (gradeFields != null) {
+            gradePanel.removeAll();
+            gradeFields = null;
+            validate();
+            repaint();
+        }
+    }
+
+    private String getLetterGrade(double average) {
+        if (average >= 90) {
+            return "A";
+        } else if (average >= 80) {
+            return "B";
+        } else if (average >= 70) {
+            return "C";
+        } else if (average >= 60) {
+            return "D";
+        } else {
+            return "F";
+        }
+    }
+
+    private double calculateGPA(String letterGrade) {
+        switch (letterGrade) {
+            case "A":
+                return 4.0;
+            case "B":
+                return 3.0;
+            case "C":
+                return 2.0;
+            case "D":
+                return 1.0;
+            default:
+                return 0.0;
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            GradeTrackerUI app = new GradeTrackerUI();
+            app.setVisible(true);
+        });
+    }
+}
