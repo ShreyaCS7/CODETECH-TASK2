@@ -12,7 +12,8 @@ A simple Java Swing application for tracking and calculating grades. This applic
 
 ## Screenshots
 
-![Screenshot of Grade Tracker UI](path-to-your-screenshot.png)
+![image](https://github.com/user-attachments/assets/30544198-708d-4c5d-b174-9c8afe891916)
+
 
 ## Getting Started
 
