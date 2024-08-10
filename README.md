@@ -1,4 +1,11 @@
 # CODETECH-TASK2
+- Name: Shreya C S
+- Company: CODTECH IT SOLUTIONS 
+- ID:CT4JP4785
+- Domain: JAVA PROGRAMMING
+- Duration: July to August 2024 
+- Mentor:Neela Santhosh kumar
+- 
 # Grade Tracker UI
 
 A simple Java Swing application for tracking and calculating grades. This application allows users to enter grades for multiple subjects or assignments and then calculates the average grade, corresponding letter grade, and GPA.
